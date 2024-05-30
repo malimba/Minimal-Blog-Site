@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <script crossorigin="anonymous" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="{% static 'blog.min.js' %}"></script>
+</head>
+<body style="height:100vh;">
+<div style="background: url(https://bootstrapious.com/i/snippets/sn-static-header/background.jpg)" class="jumbotron bg-cover text-white">
+    <div class="container py-5 text-center">
+        <h1 class="display-4 font-weight-bold">Malimba's Minimalistic Blog</h1>
+        <p class="font-italic mb-0">For DIV Challenge 3</p>
+
+
+    </div>
+</div>
+
+<div class="container py-5">
+    {% if posts %}
+    <h3>Posts</h3>
+    {% for post in posts %}
+    <div style="border:2px solid black">
+        <h4>{{post.content}}</h4>
+        <small>{{post.dateCreated}}</small>
+        <br>
+        <button class="btn btn-primary" onclick="showEditInp({{post.id}})">Edit</button>
+        <form id="delForm">
+            {% csrf_token %}
+        <button class="btn btn-danger" onclick="delPost({{post.id}})">Delete</button>
+        </form>
+    </div>
+    {% endfor %}
+    {% else %}
+    {% endif %}
+    <div style="margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; justify-content: flex-end;">
+     <div style="width: 100%; display: flex; justify-content: center; padding: 10px; box-sizing: border-box; background-color: #f9f9f9;">
+         <form id="postSubmission">
+             {% csrf_token %}
+        <input type="text" name="bPUpload" id="bPUpload" placeholder="Blog Post goes here..." style="flex: 1; padding: 10px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; margin-right: 10px;">
+        <button onclick="submitPost();" type="submit" style="padding: 10px 20px; font-size: 16px; border: 1px solid #ccc; border-radius: 4px; background-color: #007BFF; color: white; cursor: pointer;">Submit</button>
+         </form>
+    </div>
+    </div>
+    <div id="editModal" style="display: none; position: fixed; z-index: 1; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.4); justify-content: center; align-items: center;">
+        <div style="background-color: #fefefe; margin: auto; padding: 20px; border: 1px solid #888; width: 300px; border-radius: 5px; position: relative;">
+            <span id="closeModalBtn" style="color: #aaa; float: right; font-size: 28px; font-weight: bold; position: absolute; right: 10px; top: 10px; cursor: pointer;">&times;</span>
+            <input type="text" id="modalInput" placeholder="Enter text here..." style="width: 100%; padding: 10px; margin-bottom: 10px; box-sizing: border-box;">
+            <div style="text-align: right;">
+                <button id="submitModalBtn" style="padding: 10px 20px; border: none; background-color: #007BFF; color: white; cursor: pointer; border-radius: 4px;" data-currentquestion="1" onclick="editPost(this)">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
